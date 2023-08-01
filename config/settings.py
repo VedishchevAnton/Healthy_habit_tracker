@@ -40,7 +40,8 @@ STANDARD_APPS = [
 USER_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
-    'users'
+    'users',
+    'app_habit'
 ]
 
 INSTALLED_APPS = STANDARD_APPS + USER_APPS
