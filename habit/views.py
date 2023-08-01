@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 
-from app_habit.serializers import HabitSerializer
+from habit.serializers import HabitSerializer
 
 
 # Create your views here.
