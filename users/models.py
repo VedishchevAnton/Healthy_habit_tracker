@@ -43,6 +43,10 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True,
                                     verbose_name='Подтверждение почты')  # default=True иначе не подключится к админке
 
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
