@@ -1,12 +1,13 @@
 from django.db import models
 
+from config import settings
 from users.models import NULLABLE
 
 
 # Create your models here.
 
 class Habit(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Пользователь')  # создатель привычки
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')  # создатель привычки
     place = models.CharField(max_length=255, verbose_name='Место')  # место, в котором необходимо выполнять привычку
     time = models.TimeField(verbose_name='Время')  # время, когда необходимо выполнять привычку
     action = models.CharField(max_length=255,
