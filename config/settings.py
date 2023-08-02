@@ -40,6 +40,7 @@ STANDARD_APPS = [
 USER_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
+
     'users',
     'habit'
 ]
@@ -129,13 +130,22 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'  # это настройка в Django, которая позволяет использовать
+# кастомную модель пользователя вместо стандартной модели contrib.auth.models.User.
 
-# Настройки JWT-токенов
+
 REST_FRAMEWORK = {
+    # Настройки JWT-токенов
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # Настройка прав доступа
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # без ограничений для всех включая анонимов
+        # 'rest_framework.permissions.IsAuthenticated' # перекрываем полностью всю работу от анонимных
+        # (неавторизованных пользователей)
+    ]
+
 }
 
 # Настройки срока действия токенов
