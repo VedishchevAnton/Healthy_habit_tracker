@@ -22,4 +22,4 @@ urlpatterns = [
 # {
 #     "email": "admin@mail.ru",
 #     "password": "Q1w2e3r4"
-# }
+# } # суперюзер
