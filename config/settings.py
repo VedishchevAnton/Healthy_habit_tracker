@@ -141,11 +141,10 @@ REST_FRAMEWORK = {
     ],
     # Настройка прав доступа
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # без ограничений для всех включая анонимов
-        # 'rest_framework.permissions.IsAuthenticated' # перекрываем полностью всю работу от анонимных
+        'rest_framework.permissions.IsAuthenticated'  # перекрываем полностью всю работу от анонимных
         # (неавторизованных пользователей)
+        # 'rest_framework.permissions.AllowAny' # без ограничений для всех включая анонимов
     ]
-
 }
 
 # Настройки срока действия токенов
