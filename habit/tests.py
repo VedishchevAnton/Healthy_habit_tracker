@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.test import APITestCase
 
 from habit.models import Habit
@@ -96,3 +95,4 @@ class HabitTestCase(APITestCase):
         self.assertEqual(Habit.objects.count(),
                          0)  # Проверяем, что количество объектов модели Habit равно 0,
         # что означает успешное удаление привычки.
+
