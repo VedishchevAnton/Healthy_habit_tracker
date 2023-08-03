@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from habit.models import Habit
 from habit.pagination import MyPagination
 from habit.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly
@@ -11,7 +11,7 @@ from habit.serializers import HabitSerializer
 
 class HabitCreateAPIView(generics.CreateAPIView):
     serializer_class = HabitSerializer
-    permission_classes = [IsAuthenticated]  # добавляем класс IsAuthenticated для проверки авторизации пользователя
+    permission_classes = [AllowAny]  # добавляем класс IsAuthenticated для проверки авторизации пользователя
 
     def perform_create(self, serializer):
         # Получаем авторизированного пользователя
@@ -29,9 +29,9 @@ class HabitListAPIView(generics.ListAPIView):
         return Habit.objects.all()
 
 
-class HabitRetrieveAPIView(generics.UpdateAPIView):
+class HabitRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = HabitSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [AllowAny, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         return Habit.objects.all()
