@@ -40,6 +40,7 @@ STANDARD_APPS = [
 USER_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
 
     'users',
     'habit'
