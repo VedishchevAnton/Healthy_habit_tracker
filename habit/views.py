@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -26,7 +27,13 @@ class HabitListAPIView(generics.ListAPIView):
     pagination_class = MyPagination
 
     def get_queryset(self):
-        return Habit.objects.all()
+        user = self.request.user
+        if user.is_authenticated:
+            return Habit.objects.filter(Q(public=True) | Q(
+                user=user))  # Q - это объект, который используется для создания сложных запросов в Django.
+            # Он позволяет объединять несколько фильтров в одном запросе, используя операторы "или" и "и".
+        else:
+            return Habit.objects.filter(public=True)
 
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):

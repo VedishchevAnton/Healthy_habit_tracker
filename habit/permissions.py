@@ -21,12 +21,14 @@ class IsPublicOrReadOnly(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Разрешить чтение любому пользователю
-        if request.method in permissions.SAFE_METHODS:
-            return True
+        # # Разрешить чтение любому пользователю
+        # if request.method in permissions.SAFE_METHODS:
+        #     return True
 
         # Разрешить запись только владельцу привычки
-        if obj.public:
+        if obj.public == True:
             return True
+        elif obj.public == False and obj.user != request.user:
+            return False
         else:
             return False
