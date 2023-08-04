@@ -3,21 +3,30 @@ from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
-    Пользователь может изменять или удалять только свои привычки.
+    Пользователь может работать только со своими привычками.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Разрешить только чтение для неавторизованных пользователей
+        # Разрешить чтение любому пользователю
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Разрешить изменение или удаление только владельцу привычки
+        # Разрешить запись только владельцу привычки
         return obj.user == request.user
 
 
-class IsAuthenticatedOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
+class IsPublicOrReadOnly(permissions.BasePermission):
     """
-    Разрешить доступ на чтение неавторизованным пользователям,
-    но требовать авторизации для любых других действий.
+    Пользователь может видеть список публичных привычек без возможности их как-то редактировать или удалять.
     """
-    pass
+
+    def has_object_permission(self, request, view, obj):
+        # Разрешить чтение любому пользователю
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Разрешить запись только владельцу привычки
+        if obj.public:
+            return True
+        else:
+            return False
