@@ -165,3 +165,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
+
+# Настройки работы с Telegram
+TELEGRAM_API_TOKEN = '6327591696:AAElFwIGxwzWrrSx4M4EZYrbEszkymgR_2w'
+USER_TELEGAM_ID = '926145993'
+CHAT_ID = '926145993'
