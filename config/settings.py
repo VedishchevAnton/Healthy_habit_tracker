@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -22,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6=d1tmt+dtkhfqlh@@a22&94*r4z6eq2b)+v^lj63kx$6+j^2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -88,9 +92,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'course_7',
-        'USER': 'postgres',
-        'PASSWORD': 231287,  # Пароль для этого пользователя
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),  # Пароль для этого пользователя
         'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
         'PORT': 5432,  # Порт, на котором работает сервер БД
     }
@@ -148,7 +152,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'  # перекрываем полностью всю работу от анонимных
         # (неавторизованных пользователей)
-        # 'rest_framework.permissions.AllowAny'  # без ограничений для всех включая анонимов
+        # 'rest_framework.permissions.AllowAny' # без ограничений для всех включая анонимов
 
     ]
 }
@@ -169,9 +173,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Настройки работы с Telegram
-TELEGRAM_API_TOKEN = '6327591696:AAElFwIGxwzWrrSx4M4EZYrbEszkymgR_2w'
-USER_TELEGAM_ID = '926145993'
-CHAT_ID = '926145993'
+TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
+USER_TELEGAM_ID = os.getenv('USER_TELEGAM_ID')
+CHAT_ID = os.getenv('CHAT_ID')
 
 # URL-адрес брокера сообщений
 CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
