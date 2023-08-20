@@ -9,11 +9,15 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -22,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6=d1tmt+dtkhfqlh@@a22&94*r4z6eq2b)+v^lj63kx$6+j^2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -38,8 +42,15 @@ STANDARD_APPS = [
 ]
 
 USER_APPS = [
+    'django_filters',
     'rest_framework',
-    'users'
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'drf_yasg',
+    'django_celery_beat',
+
+    'users',
+    'habit'
 ]
 
 INSTALLED_APPS = STANDARD_APPS + USER_APPS
@@ -47,6 +58,7 @@ INSTALLED_APPS = STANDARD_APPS + USER_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -80,9 +92,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'course_7',
-        'USER': 'postgres',
-        'PASSWORD': 231287,  # Пароль для этого пользователя
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),  # Пароль для этого пользователя
         'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
         'PORT': 5432,  # Порт, на котором работает сервер БД
     }
@@ -111,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -127,4 +139,63 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'  # это настройка в Django, которая позволяет использовать
+# кастомную модель пользователя вместо стандартной модели contrib.auth.models.User.
+
+
+REST_FRAMEWORK = {
+    # Настройки JWT-токенов
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # Настройка прав доступа
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'  # перекрываем полностью всю работу от анонимных
+        # (неавторизованных пользователей)
+        # 'rest_framework.permissions.AllowAny' # без ограничений для всех включая анонимов
+
+    ]
+}
+
+# Настройки срока действия токенов
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+# Настройки работы с Telegram
+TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
+USER_TELEGAM_ID = os.getenv('USER_TELEGAM_ID')
+CHAT_ID = os.getenv('CHAT_ID')
+
+# URL-адрес брокера сообщений
+CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = "Europe/Moscow"
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Настройки для Celery
+CELERY_BEAT_SCHEDULE = {
+    'send_telegram_message': {
+        'task': 'education.tasks.send_telegram_message',  # Путь к задаче
+        'schedule': timedelta(days=1),  # Расписание выполнения задачи
+    },
+}
