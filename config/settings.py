@@ -26,9 +26,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-6=d1tmt+dtkhfqlh@@a22&94*r4z6eq2b)+v^lj63kx$6+j^2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'course_docker',
+        'NAME': 'docker_db',
         'USER': 'postgres',
-        'PASSWORD': 231287,  # Пароль для этого пользователя
-        'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
-        'PORT': 5432,  # Порт, на котором работает сервер БД
+        # 'PASSWORD': 231287,  # Пароль для этого пользователя
+        # 'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
+        # 'PORT': 5432,  # Порт, на котором работает сервер БД
     }
 }
 
@@ -144,6 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
