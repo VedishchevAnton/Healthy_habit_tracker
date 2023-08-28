@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'docker_db',
+        'NAME': 'course_7',
         'USER': 'postgres',
-        # 'PASSWORD': 231287,  # Пароль для этого пользователя
-        # 'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
-        # 'PORT': 5432,  # Порт, на котором работает сервер БД
+        'PASSWORD': 231287,  # Пароль для этого пользователя
+        'HOST': '127.0.0.1',  # Адрес, на котором развернут сервер БД
+        'PORT': 5432,  # Порт, на котором работает сервер БД
     }
 }
 
